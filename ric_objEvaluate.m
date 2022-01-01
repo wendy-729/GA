@@ -1,4 +1,4 @@
- function ric=ric_objEvaluate(implement,schedule,actNo,resNo,duration,req,deadline, c)
+function ric=ric_objEvaluate(implement,schedule,actNo,resNo,duration,req,deadline, c)
 u=zeros(resNo,deadline);
 ric=0;
 for i=1:actNo
