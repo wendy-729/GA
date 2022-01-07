@@ -21,12 +21,12 @@ pop=para(1);
 p_cross=para(2);
 p_mutation=para(3);
 % 活动数量
-for actN=[30]
+for actN=[120]
 actNumber=num2str(actN);
 %% 测试哪一组数据
-for gd=1:1
+for gd=4:4
 groupdata= num2str(gd);
-for dtime=[1.0]
+for dtime=[1.0,1.2]
 dt=num2str(dtime);
 % % 读取CPLEX中的最优解
 % fp_cplex=[fpath_clpex,'sch_rlp_32_dtime_',dt,'.txt'];
@@ -34,7 +34,7 @@ dt=num2str(dtime);
 % % cplex求出最优值
 % opt_index=find(cplex_data(:,4)==2);
 % 遍历每一个实例
-for act=11:20
+for act=1:2:600
 disp(act)
 rng(rn_seed,'twister');
 % 惩罚成本
@@ -112,7 +112,7 @@ for i=1:pop
             end
         end
     end
-    d = path_floyd( actNo, weigth_arc,implement);
+    d = path_floyd_new( actNo, weigth_arc,implement);
     % 最早开始时间和最晚开始时间
     [es, ef]= forwardPass( projRelation_i, duration ,implement);
     [ls, lf]= backwardPass(projRelation_i, duration, deadline,implement);  
@@ -360,7 +360,7 @@ while nr_schedules<end_schedules-sum_tt
                 end
             end
         end
-        d = path_floyd( actNo, weigth_arc,implement);
+        d = path_floyd_new( actNo, weigth_arc,implement);
         % 最早开始时间和最晚开始时间
         [es, ef]= forwardPass( projRelation_i, duration ,implement);
         [ls, lf]= backwardPass(projRelation_i, duration, deadline,implement);  
@@ -425,15 +425,15 @@ cputime=toc;
 disp(cputime)
 % disp(cb)
 % 输出文件
-% setName = ['rlp_',num2str(actNo)];
-% fpathRoot=['D:\研究生资料\RLP-PS汇总\第五次投稿-Annals of Operations Research\ANOR大修\GA_abs\J',actNumber,'\',groupdata,'\'];
-% disp(actNumber)
-% dt=num2str(dtime);
-% outResults=[act,best_chrom(actNo+1),cputime,best_schedule,best_chrom(1:actNo),nr_schedules];
-% outFile=[fpathRoot,num2str(end_schedules),'sch_',setName,'_dtime_',dt,'.txt'];
-% disp(['Instance ',num2str(act),' has been solved.']);
-% dlmwrite(outFile,outResults, '-append', 'newline', 'pc',  'delimiter', '\t');
-% outResults=[]; 
+setName = ['rlp_',num2str(actNo)];
+fpathRoot=['C:\Users\ASUS\Desktop\GA_abs\J',actNumber,'\',groupdata,'\'];
+disp(actNumber)
+dt=num2str(dtime);
+outResults=[act,best_chrom(actNo+1),cputime,best_schedule,best_chrom(1:actNo),nr_schedules];
+outFile=[fpathRoot,num2str(end_schedules),'sch_',setName,'_dtime_',dt,'.txt'];
+disp(['Instance ',num2str(act),' has been solved.']);
+dlmwrite(outFile,outResults, '-append', 'newline', 'pc',  'delimiter', '\t');
+outResults=[]; 
 end % 实例
 end % 终止日期循环
 end % 第几组数据

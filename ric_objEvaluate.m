@@ -4,6 +4,11 @@ ric=0;
 for i=1:actNo
     if implement(i)==1
         for k=1:resNo
+%             disp(schedule)
+%             disp((schedule(i)+1))
+%             disp((schedule(i)+duration(i)))
+%             disp(deadline)
+%             disp('-----------------------')
             for t=(schedule(i)+1):(schedule(i)+duration(i))
                 u(k,t)=u(k,t)+req(i,k);
             end

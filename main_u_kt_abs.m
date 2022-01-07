@@ -10,21 +10,21 @@ u_kt2_set = zeros(240,1);
 var_set_abs =  zeros(1,480);
 abs_ukt_set = zeros(240,1);
 % 活动数量
-for actN=[30]
+for actN=[120]
 actNumber=num2str(actN);
 %% 测试哪一组数据
-for gd=1:1
+for gd=4:4
 groupdata= num2str(gd);
-for dtime=[1.0]
+for dtime=[1.2]
 dt=num2str(dtime);
 % 读取得到的进度计划
 fpath =['D:\研究生资料\RLP-PS汇总\大修\大修实验结果final\GA1\J',actNumber,'\',groupdata,'\','5000sch_rlp_',num2str(actN+2),'_dtime_',dt,'.txt'];
 data = dlmread(fpath);
-fpath_abs = ['C:\Users\ASUS\Desktop\GA_abs\J',actNumber,'\',groupdata,'\','5000sch_rlp_',num2str(actN+2),'_dtime_',dt,'.txt'];
+fpath_abs = ['D:\研究生资料\RLP-PS汇总\第五次投稿-Annals of Operations Research\ANOR大修\GA_abs\J',actNumber,'\',groupdata,'\','5000sch_rlp_',num2str(actN+2),'_dtime_new_',dt,'.txt'];
 data_abs = dlmread(fpath_abs);
 % 遍历每一实例
 count = 0;
-for act=1:2:480
+for act=1:2:600
     count = count+1;
 % for act=opt_index'
 % 惩罚成本
@@ -63,15 +63,17 @@ deadline=floor(dtime*all_eft(actNo));
 setName = ['rlp_',num2str(actNo)];
 
 schedule = data(act, 4:3+actN+2);
-vl = data(act, 36:35+actN+2);
+% disp(schedule)
+vl = data(act, actN+6:actN+5+actN+2);
 obj = ric_objEvaluate(vl,schedule,actNo,resNo,duration,req,deadline, cost);
 % disp(obj)
 % var_set(count)=variance;
 u_kt2_set(count) = obj;
 
 % 计算资源的使用量的绝对值
+% disp(count)
 schedule_abs = data_abs(count, 4:3+actN+2);
-vl_abs = data_abs(count, 36:35+actN+2);
+vl_abs = data_abs(count, actN+6:actN+5+actN+2);
 obj_abs = ric_objEvaluate(vl_abs,schedule_abs,actNo,resNo,duration,req,deadline, cost);
 
 % var_set_abs(count) = variance_abs;
@@ -82,7 +84,6 @@ abs_ukt_set(count) = obj_abs;
 % 资源使用量的平方
 
 end %实例
-
 end % 截止日期
 end % 组数
 end % 活动数量
