@@ -10,21 +10,21 @@ for i=1:actNo
         end
     end
 end
-% % 资源的绝对值
-% for k=1:resNo
-%     for t=2:deadline
-%         temp = u(k,t)-u(k,t-1);
-%         if  u(k,t)-u(k,t-1)<0
-%              temp = u(k,t-1)-u(k,t);
-%         end
-%         u_kt2=u_kt2+c(k)*temp;
-%     end
-%     u_kt2 = u_kt2+c(k)*(u(k,1)+u(k,deadline));
-% end
-% 资源的成本
+% 资源的绝对值
 for k=1:resNo
-    for t=1:deadline
-        u_kt2=u_kt2+c(k)*u(k,t)*u(k,t);
+    for t=2:schedule(actNo)+1
+        temp = u(k,t)-u(k,t-1);
+        if  u(k,t)-u(k,t-1)<0
+             temp = u(k,t-1)-u(k,t);
+        end
+        u_kt2=u_kt2+c(k)*temp;
     end
+    u_kt2 = u_kt2+c(k)*u(k,1);
 end
+% 资源的使用量平方
+% for k=1:resNo
+%     for t=1:deadline
+%         u_kt2=u_kt2+c(k)*u(k,t)*u(k,t);
+%     end
+% end
 end

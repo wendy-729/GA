@@ -9,6 +9,8 @@ rn_seed = 317731;
 % 480个实例的惩罚成本
 fcost='D:\研究生资料\RLP-PS汇总\实验数据集\cost.txt';
 costData = initfile(fcost);
+% 读取CPLEX的求解结果
+fpath_clpex='D:\研究生资料\RLP-PS汇总\实验结果\CPLEX\J30\';
 % 活动数量
 for actN=[30]
 actNumber=num2str(actN);
@@ -18,12 +20,19 @@ groupdata= num2str(gd);
 for dtime=[1.0]
 %% 输出文件路径
 setName = ['rlp_',num2str(actN)];
-fpathRoot=['C:\Users\ASUS\Desktop\实验结果\GA\J',actNumber,'\'];
+fpathRoot=['C:\Users\ASUS\Desktop\'];
 dt=num2str(dtime);
 act_count=0;
 
+% 读取CPLEX中的最优解
+fp_cplex=[fpath_clpex,'sch_rlp_32_dtime_',dt,'.txt'];
+cplex_data=dlmread(fp_cplex);
+% cplex求出最优值
+opt_index=find(cplex_data(:,4)==1);
+% disp(opt_index)
 % 遍历每一个实例
-for act=1:1
+for act=opt_index'
+% for act=1:480
 % disp(act)
 rng(rn_seed,'twister');
 act_count=act_count+1;
@@ -55,6 +64,7 @@ choiceList=sort(choiceList);
 % [lst,lft]=backward( projRelation, duration, all_eft(actNo));
 % 项目的截止日期
 deadline=floor(dtime*all_eft(actNo));
+tic
 % 平均资源需求
 avg_res=zeros(1,resNo);
 for k=1:resNo
@@ -70,7 +80,17 @@ for k=1:resNo
     ukt=ukt+cost(k)*avg_res(k)*avg_res(k)*deadline;
 end
 ukt=floor(ukt);
+cputime = toc;
+%% 写入文件
+outResults=[act,ukt,cputime];
+outFile=[fpathRoot,'lower_m',setName,'_dt_',dt,'_','.txt'];
+% % 时间
+% outResults=[act,best_implement(actNo+1),best_implement(actNo+2),cputime,best_al,best_implement];
+% outFile=[fpathRoot,num2str(end_time),'s_sch_de_target_ssgs1_',setName,'_dt_',dt,'_',num2str(rep),'.txt'];
+dlmwrite(outFile,outResults,'-append', 'newline', 'pc',  'delimiter', '\t');
 
+outResults=[];
+disp(['Instance ',num2str(act),' has been solved.']);
 end % 实例
 end %截止日期
 end % 组数

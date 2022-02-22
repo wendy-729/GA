@@ -12,13 +12,13 @@ for i=1:actNo
 end
 % disp(u)
 for k=1:resNo
-    for t=2:deadline
+    for t=2:schedule(actNo)+1
         temp = u(k,t)-u(k,t-1);
         if  u(k,t)-u(k,t-1)<0
              temp = u(k,t-1)-u(k,t);
         end
         u_kt2=u_kt2+c(k)*temp;
     end
-    u_kt2 = u_kt2+c(k)*(u(k,1)+u(k,deadline));
+    u_kt2 = u_kt2+c(k)*u(k,1);
 end
 end
